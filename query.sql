@@ -7,6 +7,7 @@ INSERT INTO category(name)VALUES('t-shirt');
 
 SELECT products.*, category.name,  FROM products INNER JOIN category ON products.id_category = category.id;
 SELECT products.*, users.id, users.name FROM products INNER JOIN users ON products.userid = users.id;
+SELECT products.*, users.id, users.name FROM products INNER JOIN users ON products.userid = users.id;
 
 CREATE TABLE transactions(
     id INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,

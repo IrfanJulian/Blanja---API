@@ -23,54 +23,6 @@ exports.getData = async(req,res) =>{
     }
 }
 
-// exports.getData = (req,res,next) =>{
-//     userModel.getData()
-//     .then((result)=>{
-//         res.send({status: 200, message: 'get data success', data: result.rows})
-//     })
-//     .catch((error)=>{
-//         res.send({message: 'error', error})
-//     })
-// }
-
-// exports.insertData = (req, res) =>{
-//     const validateEmail = userModel.findByEmail()
-//     console.log(validateEmail);
-//     if(validateEmail){
-//         res.json({message: 'Email is already exist'})
-//     }
-//     const {name, email, role, password, phone, gender} = req.body
-//     let data = {
-//         id: uuidv4(),
-//         name,
-//         email,
-//         role,
-//         password,
-//         phone,
-//         gender
-//     }
-//     userModel.insertData(data)
-//     .then(()=>{
-//         res.send({status: 200, message: 'add data success'})
-//     })
-//     .catch((error)=>{
-//         res.send({message: 'error', error})
-//     })
-// }
-
-// exports.insertProduct = async(req,res) =>{
-//     try {
-//       const {name,brand,condition,description,stock,id_category,price} = req.body
-//       const photo = req.file
-//       const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })
-//       const data = {name,brand,condition,description,stock,id_category,price,photo: [image.secure_url]}
-//       await productModel.insertData(data)
-//       return commonHelper.response(res, data, 'sucess', 200, 'Add data sucess')
-//     } catch (error) {
-//       res.send({message: 'error', error})
-//     }
-//   }
-
 exports.insertData = async(req, res) =>{
     try {
         const {name, email, role, password, phone, gender, photo} = req.body
@@ -129,9 +81,9 @@ exports.login = async (req,res) => {
 
 exports.getProfile = async(req, res)=>{
     try {
-        const email = req.user.email
-        const { rows: [user] } = await userModel.findByEmail(email)
-        commonHelper.response(res, user, 'suuccess', 200, 'get profile success')
+        const id = req.params.id
+        const {rows} = await userModel.getDataById(id)
+        commonHelper.response(res, rows, 'suuccess', 200, 'get profile success')
     } catch (error) {
         console.log(error);
         res.json({message: 'error', error})
@@ -139,15 +91,20 @@ exports.getProfile = async(req, res)=>{
 }
 
 
-exports.updateData = (req, res) =>{
-    userModel.updateData(req.params.id, req.body)
-    .then(()=>{
-        res.json({status: 200, message: 'update data success'})
-    })
-    .catch((error)=>{
-        res.json({message: 'error', error})
-    })
-}
+exports.updateData = async(req, res) => {
+    try {
+        const id = req.params.id
+        const {name,email,store_name,phone} = req.body
+        let photo = req.file
+        const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })
+        const data = {name,email,store_name,phone,photo: image.secure_url} 
+        userModel.updateData(id, data)
+          return commonHelper.response(res, data, 'success', 200, 'data updated')
+      } catch (error) {
+        console.log(error);
+          // res.send({message: 'error', error})
+      }
+    },
 
 exports.deleteData = (req,res) =>{
     userModel.deleteData(req.params.id)

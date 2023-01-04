@@ -8,14 +8,18 @@ const findByEmail = (email) =>{
     return pool.query(`SELECT * FROM users WHERE email='${email}'`)
 }
 
+const getDataById = (id) => {
+    return pool.query(`SELECT * FROM users WHERE id='${id}'`)
+}
+
 const insertData = (data) =>{
     const {id, name, email, password, role, phone, gender, photo} = data
     return pool.query(`INSERT INTO users(id, name, email, password, role, phone, gender, photo)VALUES('${id}', '${name}', '${email}', '${password}', '${role}', '${phone}', '${gender}', '${photo}')`)
 }
 
 const updateData = (id, data) =>{
-    const {name, email, role, password, phone, gender, photo} = data
-    return pool.query(`UPDATE users SET name='${name}', email='${email}', role='${role}', password='${password}', phone=${phone}, gender='${gender}', photo='${photo}' WHERE id=${id}`)
+    const {name,email,store_name,phone,photo} = data
+    return pool.query(`UPDATE users SET name='${name}', email='${email}', store_name='${store_name}', phone='${phone}', photo='${photo}' WHERE id='${id}'`)
 }
 
 const deleteData = (id) =>{
@@ -27,5 +31,6 @@ module.exports = {
     insertData,
     updateData,
     deleteData,
-    findByEmail
+    findByEmail,
+    getDataById
 }
