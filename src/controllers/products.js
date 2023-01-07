@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const productModel = require('../models/products')
-const commonHelper = require('../helpers/common')
+const commonHelper = require('../helpers/common');
 const cloudinary = require('cloudinary').v2
 // const client = require('../configs/redis')
 
@@ -40,7 +40,7 @@ cloudinary.config({
 
     exports.getDetailData = async (req,res) =>{
       try {
-        const id = req.params.id
+        const id = req.params.id || ''
         const {rows} = await productModel.getDetailProduct(id)
         console.log(rows);
         // client.setEx(`products/${req.params.id}`,60*60,JSON.stringify(rows))
@@ -50,14 +50,24 @@ cloudinary.config({
       }
     }
 
-    exports.insertProduct = async(req,res) =>{
+    exports.getMyProduct = async(req,res) => {
+      const id = req.params.id
       try {
-        const {name,brand,condition,description,stock,price} = req.body
-        const photo = req.file
-        const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })
-        const data = {name,brand,condition,description,stock,price,photo: [image.secure_url]}
+        const {rows} = await productModel.getMyProduct(id)
+        commonHelper.response(res, rows, 'success', 200, 'Get My Product Sucess')
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    exports.insertProduct = async(req,res) =>{
+      const {name, id_seller, category, brand, condition, description, stock, price, size} = req.body
+      const photo = req.file
+      const image = await cloudinary.uploader.upload(photo.path)
+      const data = {name, id_seller, category, brand, condition, description, stock, price, size, photo: image.secure_url}
+      // console.log(data);
+      try {
         await productModel.insert(data)
-        console.log(data);
         return commonHelper.response(res, data, 'sucess', 200, 'Add data sucess')
       } catch (error) {
         console.log(error);
@@ -66,12 +76,12 @@ cloudinary.config({
     }
 
     exports.update = async(req, res) => {
+      const id = req.params.id
+      const {name,brand,condition,description,stock,category_name,price} = req.body
+      let photo = req.file
+      const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })
+      const data = {name,brand,condition,description,stock,category_name,price,photo: image.secure_url} 
       try {
-          const id = req.params.id
-          const {name,brand,condition,description,stock,id_category,price} = req.body
-          let photo = req.file
-          const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })
-          const data = {name,brand,condition,description,stock,id_category,price,photo: image.secure_url} 
           productModel.update(id, data)
             return commonHelper.response(res, data, 'success', 200, 'data updated')
         } catch (error) {

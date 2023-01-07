@@ -1,7 +1,7 @@
 const pool = require('../configs/db')
 
 const getDataBag = () => {
-    return pool.query(`SELECT * FROM mybag`)
+    return pool.query(`SELECT mybag.*, products.name, products.brand, products.price, contact.recipients_name, contact.address, contact.zip, contact.city_subditrict, contact`);
 }
 
 const insertDataBag = (data) => {

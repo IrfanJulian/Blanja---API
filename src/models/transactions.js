@@ -1,25 +1,34 @@
 const pool = require('../configs/db')
 
 const getData  = () =>{
-    return pool.query(`SELECT * FROM transactions`)
+    return pool.query(`SELECT * FROM transaction`)
+}
+
+// const getMyBag = (id) => {
+//     return pool.query(`SELECT * FROM transaction WHERE id_seller = '${id}'`)
+// }
+
+const getMyBag = (id) => {
+    return pool.query(`SELECT transaction.*, product.name, product.brand, product.price, product.photo FROM transaction INNER JOIN product ON transaction.id_product = product.id WHERE transaction.id_customer = '${id}'`)
 }
 
 const insert = (data) =>{
-    const {name, total_order, price, total_price} = data
-    return pool.query(`INSERT INTO transactions(name, total_order, price, total_price)VALUES('${name}', ${total_order}, ${price}, ${total_price})`)
+    const {id_customer, id_seller, id_product, qty, total_price} = data
+    return pool.query(`INSERT INTO transaction(id_customer, id_seller, id_product, qty, total_price)VALUES('${id_customer}', '${id_seller}', ${id_product}, ${qty}, ${total_price})`)
 }
 
 const deleteData = (id) =>{
-    return pool.query(`DELETE FROM transactions WHERE id=${id}`)
+    return pool.query(`DELETE FROM transaction WHERE id=${id}`)
 }
 
 const update = (id, data) =>{
     const {name, total_order, price, total_price} = data
-    return pool.query(`UPDATE transactions SET name='${name}', total_order=${total_order}, price=${price}, total_price=${total_price} WHERE id=${id}`)
+    return pool.query(`UPDATE transaction SET name='${name}', total_order=${total_order}, price=${price}, total_price=${total_price} WHERE id=${id}`)
 }
 
 module.exports = {
     getData,
+    getMyBag,
     insert,
     deleteData,
     update

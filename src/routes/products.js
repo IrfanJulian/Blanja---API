@@ -9,6 +9,7 @@ const upload = require('../middlewares/upload')
 
 router.get('/', productController.getData)
 router.get('/:id', productController.getDetailData)
+router.get('/myproduct/:id', productController.getMyProduct)
 router.post('/', upload.single('photo'), productController.insertProduct)
 // router.post('/', upload.array([{ name: 'photo', maxCount: 4 }]), productController.insertProduct)
 router.put('/:id', protect, seller, upload.single('photo'), productController.update)

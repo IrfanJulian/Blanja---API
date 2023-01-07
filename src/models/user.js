@@ -13,13 +13,13 @@ const getDataById = (id) => {
 }
 
 const insertData = (data) =>{
-    const {id, name, email, password, role, phone, gender, photo} = data
-    return pool.query(`INSERT INTO users(id, name, email, password, role, phone, gender, photo)VALUES('${id}', '${name}', '${email}', '${password}', '${role}', '${phone}', '${gender}', '${photo}')`)
+    const { id, name, email, password, store_name, phone_number, role} = data
+    return pool.query(`INSERT INTO users(id, name, email, password, store_name, phone_number, role)VALUES('${id}', '${name}', '${email}', '${password}', '${store_name}', '${phone_number}', '${role}')`)
 }
 
 const updateData = (id, data) =>{
-    const {name,email,store_name,phone,photo} = data
-    return pool.query(`UPDATE users SET name='${name}', email='${email}', store_name='${store_name}', phone='${phone}', photo='${photo}' WHERE id='${id}'`)
+    const { name, email, birth, phone_number, photo, store_description, store_name } = data
+    return pool.query(`UPDATE users SET name='${name}', email='${email}', birth='${birth}', phone_number='${phone_number}', photo='${photo}', store_description='${store_description}', store_name='${store_name}' WHERE id='${id}'`)
 }
 
 const deleteData = (id) =>{

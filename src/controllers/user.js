@@ -25,25 +25,19 @@ exports.getData = async(req,res) =>{
 
 exports.insertData = async(req, res) =>{
     try {
-        const {name, email, role, password, phone, gender, photo} = req.body
-        // const photo = req.file
-        // console.log(req.file);
-        // const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/user' })
-        // const data = { name, email, password, phone, gender, photo: [image.secure_url] }
+        const { name, email, password, store_name, phone_number, role} = req.body
         const dataUser = await userModel.findByEmail(email)
         const salt = bcrypt.genSaltSync(10);
         const passwordHash = bcrypt.hashSync(password, salt);
-        // console.log(dataUser);
         if(!dataUser.rowCount){
             let data = {
                 id: uuidv4(),
                 name,
                 email,
                 password: passwordHash,
-                role,
-                phone,
-                gender,
-                photo
+                store_name,
+                phone_number,
+                role
             }
             await userModel.insertData(data)
             // console.log(data);
@@ -94,10 +88,10 @@ exports.getProfile = async(req, res)=>{
 exports.updateData = async(req, res) => {
     try {
         const id = req.params.id
-        const {name,email,store_name,phone} = req.body
+        const {name, email, phone_number, birth, store_description, store_name} = req.body
         let photo = req.file
-        const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })
-        const data = {name,email,store_name,phone,photo: image.secure_url} 
+        const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })    
+        const data = {name, email, birth, phone_number, photo: image.secure_url, store_description, store_name} 
         userModel.updateData(id, data)
           return commonHelper.response(res, data, 'success', 200, 'data updated')
       } catch (error) {
