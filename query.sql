@@ -85,3 +85,7 @@ INSERT INTO category(name)VALUES('dress');
 INSERT INTO category(name)VALUES('suit');
 
 SELECT transaction.*, product.name, product.brand, product.price FROM transaction INNER JOIN product ON transaction.id_product = product.id;
+
+SELECT users.*, contact.address, contact.zip, contact.city, contact.recipient_name, contact.recipient_phone FROM users INNER JOIN contact ON contact.id = user.id_contact WHERE users.id = contact.id_user;
+
+SELECT transaction.*, product.name AS product_name, product.brand, product.price, product.photo AS product_photo, users.name, contact.address, contact.zip, contact.city FROM transaction INNER JOIN product ON product.id = transaction.id_product INNER JOIN users ON users.id = transaction.id_customer INNER JOIN contact ON users.id_contact = contact.id;

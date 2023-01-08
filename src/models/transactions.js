@@ -17,6 +17,10 @@ const insert = (data) =>{
     return pool.query(`INSERT INTO transaction(id_customer, id_seller, id_product, qty, total_price)VALUES('${id_customer}', '${id_seller}', ${id_product}, ${qty}, ${total_price})`)
 }
 
+const getCheckout = (id)=>{
+    return pool.query(`SELECT transaction.*, product.name AS product_name, product.brand, product.price, product.photo AS product_photo, users.name, contact.address, contact.zip, contact.city FROM transaction INNER JOIN product ON product.id = transaction.id_product INNER JOIN users ON users.id = transaction.id_customer INNER JOIN contact ON users.id_contact = contact.id WHERE transaction.id_customer = '${id}'`)
+}
+
 const deleteData = (id) =>{
     return pool.query(`DELETE FROM transaction WHERE id=${id}`)
 }
@@ -29,6 +33,7 @@ const update = (id, data) =>{
 module.exports = {
     getData,
     getMyBag,
+    getCheckout,
     insert,
     deleteData,
     update

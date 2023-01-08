@@ -16,14 +16,20 @@ exports.getMyBag = async (req,res) =>{
         const id = req.params.id
         const {rows} = await transactionsModel.getMyBag(id)
         response(res, rows, 'success', 200, 'get data bag success')
-        console.log(rows);
+        // console.log(rows);
     } catch (error) {
         console.log(error);
     }
 }
 
-exports.getTotal = async(req,res)=>{
-    
+exports.getCheckout = async (req,res) => {
+    try {
+        const id = req.params.id
+        const {rows} = await transactionsModel.getCheckout(id)
+        response(res, rows, 'success', 200, 'get data bag success')
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 exports.insert = (req,res) =>{
@@ -37,15 +43,15 @@ exports.insert = (req,res) =>{
     })
 }
 
-// exports.delete = (req,res,next) =>{
-//     transactionsModel.deleteData(req.params.id)
-//     .then((result)=>{
-//         res.json({status: 200, message: 'delete data success'})
-//     })
-//     .catch((error)=>{
-//         res.json({message: 'error', error})
-//     })
-// }
+exports.deleteTransaction = async(req,res) => {
+    const id = req.params.id
+    try {
+        const {rows} = await transactionsModel.deleteData(id);
+        response(res, rows, 'success', 200, 'delete transaction success');
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 // exports.update = (req,res,next) =>{
 //     transactionsModel.update(req.params.id, req.body)
