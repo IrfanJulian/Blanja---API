@@ -89,3 +89,15 @@ SELECT transaction.*, product.name, product.brand, product.price FROM transactio
 SELECT users.*, contact.address, contact.zip, contact.city, contact.recipient_name, contact.recipient_phone FROM users INNER JOIN contact ON contact.id = user.id_contact WHERE users.id = contact.id_user;
 
 SELECT transaction.*, product.name AS product_name, product.brand, product.price, product.photo AS product_photo, users.name, contact.address, contact.zip, contact.city FROM transaction INNER JOIN product ON product.id = transaction.id_product INNER JOIN users ON users.id = transaction.id_customer INNER JOIN contact ON users.id_contact = contact.id;
+
+SELECT transaction.*, product.name AS product_name, product.price, product.brand, product.photo, contact.address, contact.zip, contact.city, contact.recipient_name, contact.recipient_phone FROM transaction INNER JOIN product ON product.id = transaction.id_product INNER JOIN contact ON transaction.id_customer = id_customer;
+
+CREATE TABLE users(id VARCHAR PRIMARY KEY, name VARCHAR, email VARCHAR, password VARCHAR, phone_number VARCHAR DEFAULT NULL, role VARCHAR, gender VARCHAR, photo VARCHAR, birth VARCHAR DEFAULT NULL, store_description VARCHAR DEFAULT NULL, store_name VARCHAR DEFAULT NULL, address VARCHAR DEFAULT NULL, zip VARCHAR DEFAULT NULL, city VARCHAR DEFAULT NULL, recipient_name VARCHAR DEFAULT NULL, recipient_phone VARCHAR DEFAULT NULL);
+
+SELECT transaction.*, product.name, product.brand, product.photo, product.price, users.address, users.zip, users.city, users.reciient_name, users.recipient_name FROM transaction INNER JOIN product ON transaction.id_product INNER JOIN users ON transaction.id_customer = users.id WHERE transaction.id_product = '';
+SELECT checkout.*, transaction.name, transaction.address FROM checkout INNER JOIN transaction WHERE transaction.id = 1;
+SELECT checkout.*, product.name, product.price, product.photo, product.brand, users.recipient_name, users.address, users.zip, users.city FROM checkout INNER JOIN product ON product.id = checkout.id_product INNER JOIN users ON users.id = checkout.id_user WHERE checkuot.id = 4;
+
+SELECT checkout.*, product.name AS product_name, product.photo, product.brand, product.price, users.name, users.address, users.zip, users.city, users.phone_number, transaction.total_price FROM checkout INNER JOIN product ON product.id = checkout.id_product INNER JOIN users ON users.id = checkout.id_user INNER JOIN transaction ON transaction.id = checkout.id_transaction WHERE checkout.id_seller = '9f9158f2-67ec-4f0d-8f8e-41e676e86545';
+
+SELECT checkout.*, product.name, product.price, product.brand, product.photo FROM checkout INNER JOIN product ON product.id = checkout.id_product WHERE checkout.id_user = 

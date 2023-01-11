@@ -100,6 +100,18 @@ exports.updateData = async(req, res) => {
       }
     },
 
+exports.updateContact = (req,res) => {
+    const id = req.params.id
+    const { address, zip, city, recipient_name, recipient_phone } = req.body
+    const data = { address, zip, city, recipient_name, recipient_phone }
+    try {
+        userModel.updateContact(id, data)
+        return commonHelper.response(res, data, 'success', 200, 'data contact updated')
+    } catch (error) {
+        commonHelper.response(res, error, 'failed', 403)
+    }
+}
+
 exports.deleteData = (req,res) =>{
     userModel.deleteData(req.params.id)
     .then(()=>{

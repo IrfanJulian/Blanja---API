@@ -18,7 +18,7 @@ const insert = (data) =>{
 }
 
 const getCheckout = (id)=>{
-    return pool.query(`SELECT transaction.*, product.name AS product_name, product.brand, product.price, product.photo AS product_photo, users.name, contact.address, contact.zip, contact.city FROM transaction INNER JOIN product ON product.id = transaction.id_product INNER JOIN users ON users.id = transaction.id_customer INNER JOIN contact ON users.id_contact = contact.id WHERE transaction.id_customer = '${id}'`)
+    return pool.query(`SELECT transaction.*, product.name AS product_name, product.price, product.brand, product.photo, contact.address, contact.zip, contact.city, contact.recipient_name, contact.recipient_phone FROM transaction INNER JOIN product ON product.id = transaction.id_product INNER JOIN contact ON transaction.id_customer = '${id}'`)
 }
 
 const deleteData = (id) =>{
