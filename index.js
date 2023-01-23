@@ -9,7 +9,6 @@ const morgan = require('morgan')
 const helmet  = require('helmet')
 const xss = require('xss-clean')
 const cors = require('cors')
-const myCors = require('./src/middlewares/common');
 // const fileupload = require('express-fileupload'); 
 
 app.use(express.json())
@@ -20,7 +19,7 @@ app.use(express.urlencoded({extended: false}))
 // }))
 app.use(helmet())
 app.use(xss())
-app.use(cors(myCors))
+app.use(cors())
 app.use(morgan('dev'))
 
 
