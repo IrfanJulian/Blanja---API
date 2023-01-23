@@ -1,11 +1,13 @@
 /* eslint-disable no-undef */
+require("dotenv").config();
+
 const { Pool } = require('pg')
 const pool = new Pool({
-    user: 'postgres',
-    host: 'containers-us-west-28.railway.app',
-    database: 'railway',
-    password: 'wnnduT9n7JYdWQgHAXKa',
-    port: '6224',
+    user: process.env.DB_USERNAME,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 })
 
 module.exports = pool 
