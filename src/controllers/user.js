@@ -4,6 +4,7 @@ const {v4: uuidv4} = require('uuid')
 const commonHelper = require('../helpers/common')
 const bcrypt = require('bcryptjs')
 const { generateToken, generateRefreshToken } = require('../helpers/auth')
+const { sendGmail } = require('../helpers/mailer')
 const cloudinary = require('cloudinary').v2
 // const client = require('../configs/redis')
 
@@ -27,6 +28,12 @@ exports.insertData = async(req, res) =>{
     try {
         const { name, email, password, store_name, phone_number, role} = req.body
         const dataUser = await userModel.findByEmail(email)
+        const digits = "0123456789";
+        let otp = "";
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < 6; i++) {
+          otp += digits[Math.floor(Math.random() * 10)];
+        }
         const salt = bcrypt.genSaltSync(10);
         const passwordHash = bcrypt.hashSync(password, salt);
         if(!dataUser.rowCount){
@@ -37,9 +44,14 @@ exports.insertData = async(req, res) =>{
                 password: passwordHash,
                 store_name,
                 phone_number,
-                role
+                role,
+                otp
             }
-            await userModel.insertData(data)
+            let result = await userModel.insertData(data)
+            if(result){
+                await sendGmail(data.email, data.otp)
+                return res.send({status: 200, message: 'success check email'})
+            }
             // console.log(data);
             res.send({status: 200, message: 'add data success'})
         }else{

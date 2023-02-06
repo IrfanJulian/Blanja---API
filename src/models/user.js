@@ -14,7 +14,7 @@ const getDataById = (id) => {
 
 const insertData = (data) =>{
     const { id, name, email, password, store_name, phone_number, role} = data
-    return pool.query(`INSERT INTO users(id, name, email, password, store_name, phone_number, role)VALUES('${id}', '${name}', '${email}', '${password}', '${store_name}', '${phone_number}', '${role}')`)
+    return pool.query(`INSERT INTO users(id, name, email, password, store_name, phone_number, role, otp)VALUES('${id}', '${name}', '${email}', '${password}', '${store_name}', '${phone_number}', '${role}', 'not_actived')`)
 }
 
 const updateData = (id, data) =>{
