@@ -13,8 +13,8 @@ const getDataById = (id) => {
 }
 
 const insertData = (data) =>{
-    const { id, name, email, password, store_name, phone_number, role} = data
-    return pool.query(`INSERT INTO users(id, name, email, password, store_name, phone_number, role, otp)VALUES('${id}', '${name}', '${email}', '${password}', '${store_name}', '${phone_number}', '${role}')`)
+    const { id, name, email, password, store_name, phone_number, role, otp} = data
+    return pool.query(`INSERT INTO users(id, name, email, password, store_name, phone_number, role, otp)VALUES('${id}', '${name}', '${email}', '${password}', '${store_name}', '${phone_number}', '${role}', '${otp}')`)
 }
 
 const updateData = (id, data) =>{
