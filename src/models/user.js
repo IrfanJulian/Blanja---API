@@ -12,14 +12,23 @@ const getDataById = (id) => {
     return pool.query(`SELECT * FROM users WHERE id='${id}'`)
 }
 
+const verify = (email) => {
+    return pool.query(`UPDATE users SET status = 'actived' WHERE email = '${email}'`)
+}
+
 const insertData = (data) =>{
     const { id, name, email, password, store_name, phone_number, role, otp} = data
     return pool.query(`INSERT INTO users(id, name, email, password, store_name, phone_number, role, otp)VALUES('${id}', '${name}', '${email}', '${password}', '${store_name}', '${phone_number}', '${role}', '${otp}')`)
 }
 
+const updatePhoto = (data) => {
+    const { id, photo } = data
+    return pool.query(`UPDATE users SET photo = '${photo}' WHERE id = '${id}'`)
+}
+
 const updateData = (id, data) =>{
-    const { name, email, birth, phone_number, photo, store_description, store_name } = data
-    return pool.query(`UPDATE users SET name='${name}', email='${email}', birth='${birth}', phone_number='${phone_number}', photo='${photo}', store_description='${store_description}', store_name='${store_name}' WHERE id='${id}'`)
+    const { name, email, birth, phone_number, store_description, store_name, gender } = data
+    return pool.query(`UPDATE users SET name='${name}', email='${email}', birth='${birth}', phone_number='${phone_number}', store_description='${store_description}', store_name='${store_name}', gender='${gender}' WHERE id='${id}'`)
 }
 
 const updateContact = (id, data) =>{
@@ -33,10 +42,12 @@ const deleteData = (id) =>{
 
 module.exports = {
     getData,
+    verify,
     insertData,
     updateData,
     updateContact,
     deleteData,
     findByEmail,
-    getDataById
+    getDataById,
+    updatePhoto
 }

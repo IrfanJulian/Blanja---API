@@ -63,6 +63,33 @@ exports.insertData = async(req, res) =>{
     }
 }
 
+// exports.verify = async (req,res) => {
+//     const email = req.params.email
+//     const otp = req.body
+//     const {rows: [dataUser]} = await userModel.findByEmail(email)
+//     if(dataUser.otp === otp){
+//         try {
+//             await userModel.verify(email)
+//             return commonHelper.response(res, null, 'success', 200, 'your account verified')
+//         } catch (error) {
+//             return commonHelper.response(res, error, 'error', 404, 'Verified otp failed')
+//         }
+//     }
+// }
+
+exports.verify = async(req,res) => {
+    const { email } = req.params
+    const { otp } = req.body
+    const {rows: [dataUser]} = await userModel.findByEmail(email)
+        if(otp === dataUser.otp){
+            await userModel.verify(email)
+            return commonHelper.response(res, null, 'sucess', 200, 'validation OTP sucess')
+        }else{
+            console.log('otp salah');
+            return commonHelper.response(res, null, 'error', 401, 'wrong OTP!')
+        }
+    }
+
 exports.login = async (req,res) => {
     const {email, password} = req.body
     const {rows: [dataUser]} = await userModel.findByEmail(email)
@@ -96,14 +123,26 @@ exports.getProfile = async(req, res)=>{
     }
 }
 
+exports.updatePhoto = async (req, res) => {
+    const id = req.params.id
+    let photo = req.file
+    try {
+    const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/user' })   
+    const data = { id, photo: image.secure_url }
+        const respons = await userModel.updatePhoto(data)
+        console.log(respons);
+        return commonHelper.response(res, null, 'success', 200, 'update photo success' )
+    } catch (error) {
+        console.log(error);
+        return commonHelper.response(res, null, 'error', 400, 'update photo failed' )
+    }
+}
 
 exports.updateData = async(req, res) => {
     try {
         const id = req.params.id
-        const {name, email, phone_number, birth, store_description, store_name} = req.body
-        let photo = req.file
-        const image = await cloudinary.uploader.upload(photo.path, { folder: 'Backend Blanja/products' })    
-        const data = {name, email, birth, phone_number, photo: image.secure_url, store_description, store_name} 
+        const {name, email, phone_number, birth, store_description, store_name, gender} = req.body 
+        const data = {name, email, birth, phone_number, store_description, store_name, gender} 
         userModel.updateData(id, data)
           return commonHelper.response(res, data, 'success', 200, 'data updated')
       } catch (error) {
