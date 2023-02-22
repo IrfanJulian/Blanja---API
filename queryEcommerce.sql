@@ -15,3 +15,7 @@ SELECT mybag.id, mybag.id_product, mybag.qty, product.name, product.photo, produ
 SELECT mybag.* FROM mybag INNER JOIN users ON mybag.id_user = '4375da32-9ccd-466a-ba27-b904b4be105b';
 
 CREATE TABLE bag(id SERIAL PRIMARY KEY, user_id TEXT, user_name TEXT, product_id INTEGER, product_name TEXT, price INTEGER, photo TEXT, brand TEXT);
+
+CREATE TABLE checkout(id_transaction SERIAL PRIMARY KEY, user_id TEXT, seller_id TEXT, username TEXT, seller_name TEXT, status TEXT DEFAULT 'PAYMENT CONFIRMATION', subtotal INTEGER);
+
+SELECT bag.* seller_id AS 

@@ -151,16 +151,17 @@ exports.updateData = async(req, res) => {
       }
     },
 
-exports.updateContact = (req,res) => {
+exports.updateAddress = (req,res) => {
     const id = req.params.id
-    const { address, zip, city, recipient_name, recipient_phone } = req.body
-    const data = { address, zip, city, recipient_name, recipient_phone }
-    try {
-        userModel.updateContact(id, data)
-        return commonHelper.response(res, data, 'success', 200, 'data contact updated')
-    } catch (error) {
-        commonHelper.response(res, error, 'failed', 403)
-    }
+    const {recipient_name, recipient_phone, address} = req.body
+    const data = {recipient_name, recipient_phone, address}
+    userModel.updateAddress(id, data)
+    .then((res)=>{
+        return commonHelper.response(res, null, 'success', 200, 'address updated')
+    })
+    .catch((err)=>{
+        return commonHelper.response(res, err, 'error', 200, 'address failed updated')
+    })
 }
 
 exports.deleteData = (req,res) =>{

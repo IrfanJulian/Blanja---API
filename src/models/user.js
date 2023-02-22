@@ -31,9 +31,9 @@ const updateData = (id, data) =>{
     return pool.query(`UPDATE users SET name='${name}', email='${email}', birth='${birth}', phone_number='${phone_number}', store_description='${store_description}', store_name='${store_name}', gender='${gender}' WHERE id='${id}'`)
 }
 
-const updateContact = (id, data) =>{
-    const { address, zip, city, recipient_name, recipient_phone } = data
-    return pool.query(`UPDATE users SET address='${address}', zip='${zip}', city='${city}', recipient_name='${recipient_name}', recipient_phone='${recipient_phone}'`)
+const updateAddress = (id, data) =>{
+    const { recipient_name, recipient_phone, address } = data
+    return pool.query(`UPDATE users SET recipient_name = '${recipient_name}', recipient_phone = '${recipient_phone}', address = '${address}' WHERE id = '${id}'`)
 }
 
 const deleteData = (id) =>{
@@ -45,7 +45,7 @@ module.exports = {
     verify,
     insertData,
     updateData,
-    updateContact,
+    updateAddress,
     deleteData,
     findByEmail,
     getDataById,

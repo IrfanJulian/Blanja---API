@@ -27,8 +27,8 @@ const countData = () =>{
 }
 
 const insert = (data) => {
-    const {name,id_seller,description,condition,photo,brand,category,stock,price,size} = data
-    return pool.query(`INSERT INTO product(name,id_seller,description,condition,photo,brand,category,stock,price,size)VALUES('${name}','${id_seller}','${description}','${condition}','${photo}','${brand}','${category}',${stock},${price},${size})`);
+    const { name, id_seller, category, brand, condition, description, stock, price, photo } = data
+    return pool.query(`INSERT INTO product(name, id_seller, category, brand, condition, description, stock, price, photo)VALUES('${name}', '${id_seller}', '${category}', '${brand}', '${condition}', '${description}', ${stock}, ${price}, '${photo}')`);
 }
 
 // const insert = ({ name,brand,condition,description,stock,price,userid,photo,size }) => {
