@@ -27,8 +27,8 @@ const updatePhoto = (data) => {
 }
 
 const updateData = (id, data) =>{
-    const { name, email, birth, phone_number, store_description, store_name, gender } = data
-    return pool.query(`UPDATE users SET name='${name}', email='${email}', birth='${birth}', phone_number='${phone_number}', store_description='${store_description}', store_name='${store_name}', gender='${gender}' WHERE id='${id}'`)
+    const { name, birth, phone_number, store_description, store_name, gender } = data
+    return pool.query(`UPDATE users SET name='${name}', birth='${birth}', phone_number='${phone_number}', store_description='${store_description}', store_name='${store_name}', gender='${gender}' WHERE id='${id}'`)
 }
 
 const updateAddress = (id, data) =>{
@@ -40,6 +40,14 @@ const deleteData = (id) =>{
     return pool.query(`DELETE FROM users WHERE id='${id}'`)
 }
 
+const forgotPassword = (otp, email) => {
+    return pool.query(`UPDATE users SET otp = ${otp} WHERE email = '${email}'`)
+}
+
+const changePassword = (email, password) => {
+    return pool.query(`UPDATE users SET password = '${password}' WHERE email = '${email}'`)
+}
+
 module.exports = {
     getData,
     verify,
@@ -49,5 +57,7 @@ module.exports = {
     deleteData,
     findByEmail,
     getDataById,
-    updatePhoto
+    updatePhoto,
+    forgotPassword,
+    changePassword
 }

@@ -1,7 +1,15 @@
 const pool = require('../configs/db')
 
-const getData = () =>{
+const getData = (by, limit) =>{
+    return pool.query(`SELECT * FROM category ORDER BY ${by} ASC LIMIT ${limit}`)
+}
+
+const getDataAll = () =>{
     return pool.query(`SELECT * FROM category`)
+}
+
+const getDataId = (id) =>{
+    return pool.query(`SELECT * FROM product WHERE category = ${id}`)
 }
 
 const insert = (data) => {
@@ -22,5 +30,7 @@ module.exports = {
     getData,
     insert,
     update,
-    deleteData
+    deleteData,
+    getDataId,
+    getDataAll
 }

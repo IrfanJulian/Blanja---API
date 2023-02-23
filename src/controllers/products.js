@@ -92,7 +92,7 @@ cloudinary.config({
     exports.delete = (req,res, next) =>{
         productModel.deleteData(req.params.id)
         .then(()=>{
-          return commonHelper.response(res, null, 'sucess', 203, 'Add data sucess')
+          return commonHelper.response(res, null, 'sucess', 203, 'delete data sucess')
         })
         .catch((error)=>{
             next(error)

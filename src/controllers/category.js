@@ -3,10 +3,32 @@ const commonHelper = require('../helpers/common')
 
 exports.get = async (req,res) =>{
     try {
-        const {rows} = await categoryModel.getData()
+        const by = req.query.by || 'id'; 
+        const limit = parseInt(req.query.limit) || 5; 
+        const {rows} = await categoryModel.getData(by, limit)
         return commonHelper.response(res, rows, 'success', 200, 'Get Data Category Success')
     } catch (error) {
+        console.log(error);
         res.send({message: 'error', error})
+    }
+}
+exports.getAll = async (req,res) =>{
+    try {
+        const {rows} = await categoryModel.getDataAll()
+        return commonHelper.response(res, rows, 'success', 200, 'Get Data Category Success')
+    } catch (error) {
+        console.log(error);
+        res.send({message: 'error', error})
+    }
+}
+
+exports.getById = async(req,res) => {
+    try {
+        const id = req.params.id
+        const {rows} = await categoryModel.getDataId(id)
+        return commonHelper.response(res, rows, 'success', 200, 'Get Detail Category Success')
+    } catch (error) {
+        return commonHelper.response(res, null, 'error', 200, 'Get Detail Category Failed')
     }
 }
 

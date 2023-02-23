@@ -63,19 +63,44 @@ exports.insertData = async(req, res) =>{
     }
 }
 
-// exports.verify = async (req,res) => {
-//     const email = req.params.email
-//     const otp = req.body
-//     const {rows: [dataUser]} = await userModel.findByEmail(email)
-//     if(dataUser.otp === otp){
-//         try {
-//             await userModel.verify(email)
-//             return commonHelper.response(res, null, 'success', 200, 'your account verified')
-//         } catch (error) {
-//             return commonHelper.response(res, error, 'error', 404, 'Verified otp failed')
-//         }
-//     }
-// }
+exports.forgotPassword = async (req, res) => {
+    try {  
+        const email = req.body.email
+        const dataUser = await userModel.findByEmail(email)
+        const digits = "0123456789";
+        let otp = "";
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < 6; i++) {
+      otp += digits[Math.floor(Math.random() * 10)];
+    }
+    if(dataUser.rowCount){
+        let result = await userModel.forgotPassword(otp, email)
+        if(result){
+            await sendGmail(email, otp)
+            return commonHelper.response(res, null, 'sucess', 200, 'check your email send otp success')
+        }else{
+            return commonHelper.response(res, null, 'error', 400, 'send email failed')
+        }
+    }
+    } catch (error) {
+        console.log(error);
+        return commonHelper.response(res, null, error, 400, 'something wrong')
+    }
+}
+
+exports.changePassword = async(req,res) => {
+    const email = req.params.email
+    const password = req.body.password
+    const salt = bcrypt.genSaltSync(10);
+    const passwordHash = bcrypt.hashSync(password, salt);
+    
+    try {
+        userModel.changePassword(email, passwordHash)
+        return commonHelper.response(res, null, 'success', 200, 'change password success')
+    } catch (error) {
+        return commonHelper.response(res, error, 'error', 400, 'change password failed')
+    }
+}
 
 exports.verify = async(req,res) => {
     const { email } = req.params
@@ -141,8 +166,8 @@ exports.updatePhoto = async (req, res) => {
 exports.updateData = async(req, res) => {
     try {
         const id = req.params.id
-        const {name, email, phone_number, birth, store_description, store_name, gender} = req.body 
-        const data = {name, email, birth, phone_number, store_description, store_name, gender} 
+        const {name, phone_number, birth, store_description, store_name, gender} = req.body 
+        const data = {name, birth, phone_number, store_description, store_name, gender} 
         userModel.updateData(id, data)
           return commonHelper.response(res, data, 'success', 200, 'data updated')
       } catch (error) {
