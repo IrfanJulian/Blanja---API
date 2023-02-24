@@ -24,11 +24,21 @@ exports.getData = async(req,res) =>{
     }
 }
 
+exports.findEmail = async(req,res) =>{
+    try {
+        const email = req.params.email
+        const {rows} = await userModel.findByEmail(email)
+        commonHelper.response(res, rows, 'sucess', 200, 'get data user sucess')
+    } catch (error) {
+        res.send({message: 'error', error})
+    }
+}
+
 exports.insertData = async(req, res) =>{
     try {
         const { name, email, password, store_name, phone_number, role} = req.body
         const dataUser = await userModel.findByEmail(email)
-        const digits = "0123456789";
+        const digits = "123456789";
         let otp = "";
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < 6; i++) {
@@ -63,28 +73,29 @@ exports.insertData = async(req, res) =>{
     }
 }
 
-exports.forgotPassword = async (req, res) => {
-    try {  
-        const email = req.body.email
+exports.checkEmail = async(req, res)=>{
+    try {
+        const email = req.params.email
         const dataUser = await userModel.findByEmail(email)
-        const digits = "0123456789";
-        let otp = "";
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < 6; i++) {
-      otp += digits[Math.floor(Math.random() * 10)];
-    }
-    if(dataUser.rowCount){
-        let result = await userModel.forgotPassword(otp, email)
-        if(result){
-            await sendGmail(email, otp)
-            return commonHelper.response(res, null, 'sucess', 200, 'check your email send otp success')
+        const digits = "123456789";
+        let otp = ''
+        for (let i = 0; i < 6; i++) {
+            otp += digits[Math.floor(Math.random() * 10)];
+          }
+        if(dataUser.rowCount){
+            let result = await userModel.forgotPassword(otp, email)
+            if(result){
+                await sendGmail(email, otp)
+                return commonHelper.response(res, null, 'sucess', 200, 'check your email send otp success')
+            }else{
+                return commonHelper.response(res, null, 'error', 400, 'send email failed')
+            }
         }else{
-            return commonHelper.response(res, null, 'error', 400, 'send email failed')
+            return commonHelper.response(res, null, 'error', 400, 'email does not exist')
         }
-    }
     } catch (error) {
         console.log(error);
-        return commonHelper.response(res, null, error, 400, 'something wrong')
+        return commonHelper.response(res, null, 'error', 403, 'all process verification code failed')
     }
 }
 
@@ -92,8 +103,7 @@ exports.changePassword = async(req,res) => {
     const email = req.params.email
     const password = req.body.password
     const salt = bcrypt.genSaltSync(10);
-    const passwordHash = bcrypt.hashSync(password, salt);
-    
+    const passwordHash = bcrypt.hashSync(password, salt);   
     try {
         userModel.changePassword(email, passwordHash)
         return commonHelper.response(res, null, 'success', 200, 'change password success')
